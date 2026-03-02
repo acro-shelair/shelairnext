@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin, Facebook, Linkedin } from "lucide-react";
 import shelairLogo from "@/assets/shelair-logo-web.png";
@@ -10,10 +11,12 @@ const Footer = () => (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-16">
         <div>
           <div className="flex items-center gap-2 font-extrabold text-xl mb-4">
-            <img
-              src={shelairLogo.src}
+            <Image
+              src={shelairLogo}
               alt="Shelair"
-              className="h-10 w-10 object-contain"
+              width={40}
+              height={40}
+              className="object-contain"
             />
             Shelair
           </div>
@@ -63,7 +66,7 @@ const Footer = () => (
         </div>
 
         <div>
-          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/40">
+          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/60">
             Services
           </h4>
           <ul className="space-y-2.5 text-sm text-dark-foreground/60">
@@ -105,7 +108,7 @@ const Footer = () => (
         </div>
 
         <div>
-          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/40">
+          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/60">
             Company
           </h4>
           <ul className="space-y-2.5 text-sm text-dark-foreground/60">
@@ -152,7 +155,7 @@ const Footer = () => (
         </div>
 
         <div>
-          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/40">
+          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/60">
             Service Areas
           </h4>
           <ul className="space-y-2.5 text-sm text-dark-foreground/60">
@@ -192,7 +195,7 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="border-t border-dark-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-dark-foreground/40">
+      <div className="border-t border-dark-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-dark-foreground/60">
         <p>
           © {new Date().getFullYear()} HVACR Pty Ltd. All rights reserved. ABN
           43 672 578 264

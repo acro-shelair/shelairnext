@@ -42,8 +42,9 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { y: 24 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const },
   },
@@ -117,19 +118,20 @@ const Hero = () => {
           {/* Right column — image + floating stat cards */}
           <motion.div
             className="relative pt-4 pb-6 lg:pt-8 lg:pb-10 lg:pr-16"
-            initial={{ x: 40 }}
-            animate={{ x: 0 }}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{
               duration: 0.8,
               delay: 0.2,
               ease: [0.25, 0.1, 0.25, 1],
             }}
           >
-            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-foreground/5">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-foreground/5 h-[240px] sm:h-[320px] lg:h-[500px]">
               <Image
                 src={heroImg}
                 alt="Commercial air conditioning installation by Shelair"
-                className="w-full h-[240px] sm:h-[320px] lg:h-[500px] object-cover"
+                fill
+                className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
               />
