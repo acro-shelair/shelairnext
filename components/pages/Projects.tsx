@@ -1,51 +1,14 @@
 "use client";
 
 import Layout from "@/components/Layout";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CTABanner from "@/components/home/CTABanner";
 import heroImg from "@/assets/hero-coldroom.jpg";
 import { motion, Variants } from "framer-motion";
-
-const projects = [
-  {
-    title: "FreshMart National Fleet",
-    type: "Maintenance Contract",
-    size: "48 stores",
-    desc: "Ongoing preventative maintenance across 48 supermarket locations. Reduced emergency call-outs by 60% in the first year through proactive servicing.",
-  },
-  {
-    title: "Harbour Kitchen — Emergency",
-    type: "Emergency Repair",
-    size: "Compressor failure",
-    desc: "2am compressor failure at a high-volume waterfront restaurant. Technician on-site within 90 minutes, system restored before morning prep.",
-  },
-  {
-    title: "PharmaLogix Brisbane",
-    type: "Maintenance & Monitoring",
-    size: "120 sqm facility",
-    desc: "TGA-compliant maintenance contract with 24/7 remote monitoring. Zero temperature excursions since program inception.",
-  },
-  {
-    title: "Aussie Meats Processing",
-    type: "Cold Room Build",
-    size: "300 sqm blast freezer",
-    desc: "High-capacity blast freezing facility with processing rooms designed for continuous 24/7 operation. Delivered on time and on budget.",
-  },
-  {
-    title: "GreenGrocer Co-op",
-    type: "System Upgrade",
-    size: "80 sqm multi-temp",
-    desc: "Ageing refrigeration system upgraded with energy-efficient compressors and smart monitoring. 28% reduction in energy costs.",
-  },
-  {
-    title: "ColdChain Logistics",
-    type: "Emergency + Maintenance",
-    size: "500 sqm warehouse",
-    desc: "Started with an emergency condenser repair, now a full preventative maintenance client with quarterly servicing across two facilities.",
-  },
-];
+import type { Project } from "@/lib/supabase/content";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -61,9 +24,8 @@ const cardVariant: Variants = {
   }),
 };
 
-const Projects = () => (
+const Projects = ({ projects }: { projects: Project[] }) => (
   <Layout>
-    
     <section className="section-padding bg-background">
       <div className="container-narrow">
         <motion.div
@@ -96,7 +58,7 @@ const Projects = () => (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((p, i) => (
             <motion.div
-              key={p.title}
+              key={p.id}
               custom={i}
               variants={cardVariant}
               initial="hidden"
@@ -105,27 +67,36 @@ const Projects = () => (
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
               className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden group"
             >
-              <div className="h-48 overflow-hidden">
-                <img
-                  src={heroImg.src}
-                  alt={p.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">
-                    {p.type}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {p.size}
+              <Link href={`/projects/${p.slug}`} className="block h-full">
+                <div className="h-48 overflow-hidden">
+                  <Image
+                    src={p.image_url || heroImg}
+                    alt={p.title}
+                    width={600}
+                    height={300}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">
+                      {p.type}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {p.size}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
+                    {p.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    {p.description}
+                  </p>
+                  <span className="text-primary text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                    View Project <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
-                <h3 className="font-bold text-lg mb-2">{p.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {p.desc}
-                </p>
-              </div>
+              </Link>
             </motion.div>
           ))}
         </div>
