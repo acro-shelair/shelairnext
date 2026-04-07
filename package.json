@@ -1,5 +1,5 @@
 {
-  "name": "acrorefrigeratornext",
+  "name": "shelairnext",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -58,18 +58,25 @@
     "@radix-ui/react-toast": "^1.2.0",
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-toggle-group": "^1.1.0",
-    "@radix-ui/react-tooltip": "^1.1.0"
+    "@radix-ui/react-tooltip": "^1.1.0",
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.99.0",
+    "resend": "^6.10.0"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sharp": "^0.32.0",
+    "autoprefixer": "^10.4.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "sharp": "^0.34.5",
+    "supabase": "^2.77.1",
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "@tailwindcss/typography": "^0.5.0",
-    "autoprefixer": "^10.4.0",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
