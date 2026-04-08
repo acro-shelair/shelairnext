@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Index from "@/components/pages/Index";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { withRetry } from "@/lib/retry";
+import { getAllIndustries, getAllBrands, getAllOtherBrands } from "@/lib/supabase/content";
 
 export const metadata: Metadata = {
   title: "Air Conditioning Installation & Service Brisbane, Gold Coast & Sunshine Coast",
@@ -96,11 +97,14 @@ export const revalidate = 600;
 
 export default async function Home() {
   const supabase = createAdminClient();
-  const [{ data: pricingTiersData }, featuredProjects] = await Promise.all([
+  const [{ data: pricingTiersData }, featuredProjects, industries, brands, otherBrands] = await Promise.all([
     withRetry(() => supabase.from("pricing_tiers").select("*").order("position")),
     withRetry(() =>
       supabase.from("projects").select("*").eq("featured", true).order("position").limit(3)
     ).then((r) => r.data ?? []).catch(() => []),
+    withRetry(() => getAllIndustries(supabase)).catch(() => []),
+    withRetry(() => getAllBrands(supabase)).catch(() => []),
+    withRetry(() => getAllOtherBrands(supabase)).catch(() => []),
   ]);
 
   return (
@@ -116,6 +120,9 @@ export default async function Home() {
       <Index
         pricingTiers={pricingTiersData ?? []}
         featuredProjects={featuredProjects}
+        industries={industries}
+        brands={brands}
+        otherBrands={otherBrands}
       />
     </>
   );
