@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getAllIndustries } from "@/lib/supabase/content";
+import { withRetry } from "@/lib/retry";
 import Industries from "@/components/pages/Industries";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Industries We Serve",
@@ -9,6 +14,8 @@ export const metadata: Metadata = {
   openGraph: { url: "https://shelair.com.au/industries" },
 };
 
-export default function IndustriesPage() {
-  return <Industries />;
+export default async function IndustriesPage() {
+  const supabase = createAdminClient();
+  const industries = await withRetry(() => getAllIndustries(supabase));
+  return <Industries industries={industries} />;
 }

@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { withRetry } from "@/lib/retry";
 
 const BASE_URL = "https://shelair.com.au";
 
@@ -9,36 +8,21 @@ export const revalidate = 3600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = createAdminClient();
 
-  const [
-    { data: posts },
-    { data: services },
-    { data: industries },
-    { data: brands },
-    { data: projects },
-    { data: cities },
-  ] = await Promise.all([
-    withRetry(() =>
-      supabase.from("posts").select("slug, updated_at").eq("published", true)
-    ),
-    withRetry(() =>
-      supabase.from("services").select("slug, updated_at").not("slug", "is", null)
-    ),
-    withRetry(() =>
-      supabase.from("industries").select("slug, updated_at")
-    ),
-    withRetry(() =>
-      supabase.from("brands").select("slug, updated_at")
-    ),
-    withRetry(() =>
-      supabase.from("projects").select("slug, updated_at")
-    ),
-    withRetry(() =>
-      supabase
-        .from("location_cities")
-        .select("slug, updated_at, location_suburbs(slug, updated_at)")
-        .order("position")
-    ),
-  ]);
+  async function query<T>(label: string, q: PromiseLike<{ data: T; error: any }>) {
+    const { data, error } = await q;
+    if (error) console.error(`[sitemap] ${label} query failed:`, error.message);
+    return data;
+  }
+
+  const [posts, services, industries, brands, projects, cities] =
+    await Promise.all([
+      query("posts", supabase.from("posts").select("slug, updated_at").eq("published", true)),
+      query("services", supabase.from("services").select("slug, updated_at").not("slug", "is", null)),
+      query("industries", supabase.from("industries").select("slug, updated_at")),
+      query("brands", supabase.from("brands").select("slug, updated_at")),
+      query("projects", supabase.from("projects").select("slug, updated_at")),
+      query("cities", supabase.from("location_cities").select("slug, updated_at, location_suburbs(slug, updated_at)").order("position")),
+    ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/` },
@@ -50,6 +34,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/contact` },
     { url: `${BASE_URL}/brands` },
     { url: `${BASE_URL}/locations` },
+    { url: `${BASE_URL}/process` },
+    { url: `${BASE_URL}/privacy` },
+    { url: `${BASE_URL}/terms` },
   ];
 
   const serviceRoutes = (services ?? []).map((s: any) => ({
