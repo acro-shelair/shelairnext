@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { headers } from "next/headers";
 import { Providers } from "@/components/providers";
@@ -135,6 +136,7 @@ export default async function RootLayout({
             {children}
           </PublicShell>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
