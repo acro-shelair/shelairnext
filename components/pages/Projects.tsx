@@ -81,11 +81,16 @@ const Projects = ({ projects }: { projects: Project[] }) => {
               variants={fadeUp}
               className="text-4xl md:text-5xl font-extrabold mb-6"
             >
-              Featured Projects
+              Commercial HVACR Projects Delivered Across South East Queensland
             </motion.h1>
-            <motion.p variants={fadeUp} className="text-lg text-muted-foreground">
-              A selection of commercial refrigeration projects delivered across
-              Australia.
+            <motion.p
+              variants={fadeUp}
+              className="text-lg text-muted-foreground"
+            >
+              See how Shelair delivers refrigeration, air conditioning,
+              ventilation and cold room projects for schools, hospitals,
+              hospitality venues, retail, food production and commercial
+              facilities.
             </motion.p>
           </motion.div>
 
@@ -181,19 +186,21 @@ const Projects = ({ projects }: { projects: Project[] }) => {
               )}
 
               <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
-                  <button
-                    key={pg}
-                    onClick={() => setPage(pg)}
-                    className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
-                      pg === currentPage
-                        ? "gradient-cta text-primary-foreground"
-                        : "border border-border bg-card hover:border-primary/40 hover:text-primary"
-                    }`}
-                  >
-                    {pg}
-                  </button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (pg) => (
+                    <button
+                      key={pg}
+                      onClick={() => setPage(pg)}
+                      className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                        pg === currentPage
+                          ? "gradient-cta text-primary-foreground"
+                          : "border border-border bg-card hover:border-primary/40 hover:text-primary"
+                      }`}
+                    >
+                      {pg}
+                    </button>
+                  )
+                )}
               </div>
 
               {currentPage < totalPages ? (

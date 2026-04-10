@@ -4,7 +4,16 @@ import { useState, useMemo } from "react";
 import Layout from "@/components/Layout";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, BookOpen, FileText, Video, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  FileText,
+  Video,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  X,
+} from "lucide-react";
 import type { Post } from "@/lib/supabase/posts";
 import { RESOURCES_PAGE_SIZE } from "@/lib/supabase/posts";
 import CTABanner from "@/components/home/CTABanner";
@@ -67,16 +76,30 @@ const Resources = ({ posts }: { posts: Post[] }) => {
             className="max-w-3xl mb-16"
             initial="hidden"
             animate="visible"
-            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } },
+            }}
           >
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4">
+            <motion.div
+              variants={fadeUp}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4"
+            >
               Resources
             </motion.div>
-            <motion.h1 variants={fadeUp} className="text-4xl md:text-5xl font-extrabold mb-6">
+            <motion.h1
+              variants={fadeUp}
+              className="text-4xl md:text-5xl font-extrabold mb-6"
+            >
               Guides, Articles & Insights
             </motion.h1>
-            <motion.p variants={fadeUp} className="text-lg text-muted-foreground">
-              Expert knowledge to help you make informed decisions about commercial air conditioning.
+            <motion.p
+              variants={fadeUp}
+              className="text-lg text-muted-foreground"
+            >
+              Expert advice on commercial refrigeration, air conditioning, beer
+              systems, ventilation and cold room systems to help you make
+              informed decisions.
             </motion.p>
           </motion.div>
 
@@ -139,12 +162,16 @@ const Resources = ({ posts }: { posts: Post[] }) => {
                         <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full flex items-center gap-1">
                           <TypeIcon type={a.type} /> {a.type}
                         </span>
-                        <span className="text-xs text-muted-foreground">{a.date}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {a.date}
+                        </span>
                       </div>
                       <h3 className="font-bold mb-2 group-hover:text-primary transition-colors leading-snug">
                         {a.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{a.description}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                        {a.description}
+                      </p>
                       <span className="text-primary text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                         Read More <ArrowRight className="w-4 h-4" />
                       </span>
@@ -172,19 +199,21 @@ const Resources = ({ posts }: { posts: Post[] }) => {
               )}
 
               <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => setPage(p)}
-                    className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
-                      p === currentPage
-                        ? "gradient-cta text-primary-foreground"
-                        : "border border-border bg-card hover:border-primary/40 hover:text-primary"
-                    }`}
-                  >
-                    {p}
-                  </button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (p) => (
+                    <button
+                      key={p}
+                      onClick={() => setPage(p)}
+                      className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                        p === currentPage
+                          ? "gradient-cta text-primary-foreground"
+                          : "border border-border bg-card hover:border-primary/40 hover:text-primary"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
               </div>
 
               {currentPage < totalPages ? (

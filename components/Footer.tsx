@@ -64,8 +64,14 @@ const DEFAULTS = {
     { label: "Contact Us", href: "/contact" },
   ] as FooterLink[],
   footer_service_links: [
-    { label: "Air Conditioning Installation", href: "/services/air-conditioning-installation" },
-    { label: "Air Conditioning Service & Repairs", href: "/services/air-conditioning-service-repairs" },
+    {
+      label: "Air Conditioning Installation",
+      href: "/services/air-conditioning-installation",
+    },
+    {
+      label: "Air Conditioning Service & Repairs",
+      href: "/services/air-conditioning-service-repairs",
+    },
     { label: "Preventative Maintenance Plans", href: "/services" },
   ] as FooterLink[],
   footer_industry_links: [
@@ -152,11 +158,11 @@ const Footer = () => {
               <Image
                 src={shelairLogo}
                 alt="Shelair"
-                width={40}
-                height={40}
+                width={160}
+                height={64}
                 className="object-contain"
+                priority
               />
-              Shelair
             </div>
             <p className="text-dark-foreground/60 text-sm leading-relaxed mb-6">
               {tagline}
@@ -306,8 +312,8 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-dark-foreground/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-dark-foreground/40">
           <p>
-            © {new Date().getFullYear()} HVACR Pty Ltd. All rights
-            reserved. ABN {abn}
+            © {new Date().getFullYear()} HVACR Pty Ltd. All rights reserved. ABN{" "}
+            {abn}
           </p>
           <div className="flex items-center gap-6">
             <Link

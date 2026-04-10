@@ -176,8 +176,8 @@ const Navbar = ({
           <Image
             src={shelairLogo}
             alt="Shelair"
-            width={120}
-            height={48}
+            width={160}
+            height={64}
             className="object-contain"
             priority
           />
