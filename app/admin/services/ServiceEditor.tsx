@@ -33,6 +33,10 @@ const schema = z.object({
   process_steps:        z.array(z.object({ step: z.string(), title: z.string(), desc: z.string() })),
   faqs:                 z.array(z.object({ q: z.string(), a: z.string() })),
   related_service_slugs: z.string(),
+  cta_heading:     z.string(),
+  cta_description: z.string(),
+  cta_button_text: z.string(),
+  cta_button_link: z.string(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -66,6 +70,10 @@ export default function ServiceEditor({ service, nextPosition }: { service?: Ser
       process_steps:        (service?.process_steps       as any[])?.map((s) => ({ step: s.step, title: s.title, desc: s.desc })) ?? [],
       faqs:                 (service?.faqs                as any[])?.map((f) => ({ q: f.q, a: f.a })) ?? [],
       related_service_slugs: service?.related_service_slugs?.join(", ") ?? "",
+      cta_heading:           service?.cta_heading      ?? "",
+      cta_description:       service?.cta_description  ?? "",
+      cta_button_text:       service?.cta_button_text  ?? "",
+      cta_button_link:       service?.cta_button_link  ?? "",
     },
   });
 
@@ -97,6 +105,10 @@ export default function ServiceEditor({ service, nextPosition }: { service?: Ser
       process_steps:         data.process_steps,
       faqs:                  data.faqs,
       related_service_slugs: data.related_service_slugs.split(",").map((s) => s.trim()).filter(Boolean),
+      cta_heading:           data.cta_heading,
+      cta_description:       data.cta_description,
+      cta_button_text:       data.cta_button_text,
+      cta_button_link:       data.cta_button_link,
     };
 
     try {
@@ -210,6 +222,29 @@ export default function ServiceEditor({ service, nextPosition }: { service?: Ser
           <div className="space-y-1.5 md:col-span-2">
             <Label>Related Service Slugs <span className="text-muted-foreground font-normal text-xs">comma-separated</span></Label>
             <Input {...register("related_service_slugs")} placeholder="emergency-refrigeration-repairs, cold-room-construction" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA Banner ─────────────────────────────────────────────────────── */}
+      <section className="space-y-5">
+        <h2 className="text-base font-semibold border-b border-border pb-2">CTA Banner <span className="text-muted-foreground font-normal text-xs">Leave blank for default</span></h2>
+        <div className="grid md:grid-cols-2 gap-5">
+          <div className="space-y-1.5 md:col-span-2">
+            <Label>CTA Heading</Label>
+            <Input {...register("cta_heading")} placeholder="Need Refrigeration, HVAC or Beer System Help?" />
+          </div>
+          <div className="space-y-1.5 md:col-span-2">
+            <Label>CTA Description</Label>
+            <Textarea {...register("cta_description")} rows={2} className="resize-none" placeholder="Fast Repairs, servicing and installations across Brisbane, the Gold Coast and Sunshine Coast." />
+          </div>
+          <div className="space-y-1.5">
+            <Label>CTA Button Text</Label>
+            <Input {...register("cta_button_text")} placeholder="Get a Free Quote" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>CTA Button Link</Label>
+            <Input {...register("cta_button_link")} placeholder="/contact" />
           </div>
         </div>
       </section>

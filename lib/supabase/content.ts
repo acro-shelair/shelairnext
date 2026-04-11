@@ -23,6 +23,10 @@ export interface Service {
   faqs: ServiceFaq[];
   related_service_slugs: string[];
   highlighted: boolean;
+  cta_heading: string;
+  cta_description: string;
+  cta_button_text: string;
+  cta_button_link: string;
 }
 
 export async function getAllServices(supabase: SupabaseClient): Promise<Service[]> {
@@ -311,6 +315,7 @@ export interface Project {
   image_url: string | null;
   images: string[];
   featured: boolean;
+  pinned: boolean;
   position: number;
 }
 

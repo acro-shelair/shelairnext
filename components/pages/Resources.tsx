@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Search,
   X,
+  Pin,
 } from "lucide-react";
 import type { Post } from "@/lib/supabase/posts";
 import { RESOURCES_PAGE_SIZE } from "@/lib/supabase/posts";
@@ -42,19 +43,33 @@ function TypeIcon({ type }: { type: string }) {
 
 const Resources = ({ posts }: { posts: Post[] }) => {
   const [query, setQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const debouncedQuery = useDebounce(query, 300);
 
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    posts.forEach((p) => { if (p.category) set.add(p.category); });
+    return Array.from(set).sort();
+  }, [posts]);
+
   const filtered = useMemo(() => {
-    if (!debouncedQuery.trim()) return posts;
-    const q = debouncedQuery.toLowerCase();
-    return posts.filter(
-      (p) =>
-        p.title.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.type.toLowerCase().includes(q)
-    );
-  }, [posts, debouncedQuery]);
+    let list = posts;
+    if (activeCategory) {
+      list = list.filter((p) => p.category === activeCategory);
+    }
+    if (debouncedQuery.trim()) {
+      const q = debouncedQuery.toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.type.toLowerCase().includes(q) ||
+          (p.category?.toLowerCase().includes(q) ?? false)
+      );
+    }
+    return [...list].sort((a, b) => (a.pinned === b.pinned ? 0 : a.pinned ? -1 : 1));
+  }, [posts, debouncedQuery, activeCategory]);
 
   const totalPages = Math.ceil(filtered.length / RESOURCES_PAGE_SIZE);
   const currentPage = Math.min(page, totalPages || 1);
@@ -65,6 +80,11 @@ const Resources = ({ posts }: { posts: Post[] }) => {
 
   const handleQueryChange = (val: string) => {
     setQuery(val);
+    setPage(1);
+  };
+
+  const handleCategoryChange = (cat: string | null) => {
+    setActiveCategory(cat);
     setPage(1);
   };
 
@@ -124,6 +144,35 @@ const Resources = ({ posts }: { posts: Post[] }) => {
             )}
           </div>
 
+          {/* Category filters */}
+          {categories.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mb-8">
+              <button
+                onClick={() => handleCategoryChange(null)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                  !activeCategory
+                    ? "gradient-cta text-primary-foreground"
+                    : "border border-border bg-card hover:border-primary/40 hover:text-primary"
+                }`}
+              >
+                All
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                    activeCategory === cat
+                      ? "gradient-cta text-primary-foreground"
+                      : "border border-border bg-card hover:border-primary/40 hover:text-primary"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          )}
+
           {paginated.length === 0 ? (
             <p className="text-muted-foreground">
               {debouncedQuery
@@ -159,9 +208,19 @@ const Resources = ({ posts }: { posts: Post[] }) => {
                     )}
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-4">
+                        {a.pinned && (
+                          <span className="text-xs font-semibold text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30 px-2 py-1 rounded-full flex items-center gap-1">
+                            <Pin className="w-3 h-3" /> Pinned
+                          </span>
+                        )}
                         <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full flex items-center gap-1">
                           <TypeIcon type={a.type} /> {a.type}
                         </span>
+                        {a.category && (
+                          <span className="text-xs font-medium text-muted-foreground bg-secondary px-2 py-1 rounded-full">
+                            {a.category}
+                          </span>
+                        )}
                         <span className="text-xs text-muted-foreground">
                           {a.date}
                         </span>

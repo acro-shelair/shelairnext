@@ -158,8 +158,8 @@ const Footer = () => {
               <Image
                 src={shelairLogo}
                 alt="Shelair"
-                width={160}
-                height={64}
+                width={240}
+                height={96}
                 className="object-contain"
                 priority
               />

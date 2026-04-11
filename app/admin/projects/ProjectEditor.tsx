@@ -31,6 +31,7 @@ const schema = z.object({
   solution:  z.string().min(1, "Required"),
   outcomes:  z.array(z.object({ text: z.string() })),
   featured:  z.boolean(),
+  pinned:    z.boolean(),
   position:  z.coerce.number().int().min(0),
 });
 
@@ -71,6 +72,7 @@ export default function ProjectEditor({
         solution:  project?.solution  ?? "",
         outcomes:  (project?.outcomes ?? []).map((t) => ({ text: t })),
         featured:  project?.featured  ?? false,
+        pinned:    project?.pinned    ?? false,
         position:  project?.position  ?? nextPosition ?? 0,
       },
     });
@@ -134,6 +136,7 @@ export default function ProjectEditor({
       images:    images,
       image_url: images[0] ?? null,
       featured:  data.featured,
+      pinned:    data.pinned,
       position:  data.position,
     };
     try {
@@ -347,6 +350,17 @@ export default function ProjectEditor({
           <div className="space-y-1.5 max-w-[120px]">
             <Label>Position</Label>
             <Input type="number" min={0} {...register("position")} />
+          </div>
+          <div className="flex items-center gap-3 pt-6">
+            <input
+              id="pinned"
+              type="checkbox"
+              {...register("pinned")}
+              className="w-4 h-4 accent-primary"
+            />
+            <Label htmlFor="pinned" className="cursor-pointer">
+              Pin to top <span className="text-muted-foreground font-normal text-xs">(always shown first on the projects page)</span>
+            </Label>
           </div>
           <div className="flex items-center gap-3 pt-6">
             <input

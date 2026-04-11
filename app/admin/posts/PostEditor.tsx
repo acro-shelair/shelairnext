@@ -70,7 +70,9 @@ const schema = z.object({
   date: z.string().min(1, "Required"),
   read_time: z.string().min(1, "Required"),
   related_slugs: z.string(),
+  category: z.string(),
   published: z.boolean(),
+  pinned: z.boolean(),
   sections: z.array(sectionSchema).min(1, "At least one section is required"),
 });
 
@@ -506,7 +508,9 @@ export default function PostEditor({ post }: { post?: Post }) {
       date: post?.date ?? "",
       read_time: post?.read_time ?? "",
       related_slugs: post?.related_slugs?.join(", ") ?? "",
+      category: post?.category ?? "",
       published: post?.published ?? false,
+      pinned: post?.pinned ?? false,
       sections: defaultSections,
     },
   });
@@ -556,7 +560,9 @@ export default function PostEditor({ post }: { post?: Post }) {
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean),
+      category: data.category || null,
       published: data.published,
+      pinned: data.pinned,
       image_url: imageUrl || null,
       updated_at: new Date().toISOString(),
     };
@@ -687,6 +693,16 @@ export default function PostEditor({ post }: { post?: Post }) {
 
         <div className="space-y-1.5">
           <Label>
+            Category{" "}
+            <span className="text-muted-foreground font-normal text-xs">
+              e.g. Refrigeration, Air Conditioning
+            </span>
+          </Label>
+          <Input {...register("category")} placeholder="e.g. Refrigeration" />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label>
             Date{" "}
             <span className="text-muted-foreground font-normal text-xs">
               e.g. Mar 2026
@@ -778,6 +794,23 @@ export default function PostEditor({ post }: { post?: Post }) {
           />
           <Label htmlFor="published" className="cursor-pointer">
             Published
+          </Label>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Controller
+            control={control}
+            name="pinned"
+            render={({ field }) => (
+              <Switch
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                id="pinned"
+              />
+            )}
+          />
+          <Label htmlFor="pinned" className="cursor-pointer">
+            Pin to top <span className="text-muted-foreground font-normal text-xs">(always shown first on the resources page)</span>
           </Label>
         </div>
       </div>

@@ -39,8 +39,8 @@ export default function SetPasswordPage() {
     // The auth/callback route already exchanged the code for a session.
     // Just verify the user has a valid session.
     const supabase = createClient();
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
         setStatus("ready");
       } else {
         setStatus("error");

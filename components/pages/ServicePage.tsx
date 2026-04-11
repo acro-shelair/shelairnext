@@ -198,7 +198,7 @@ const ServicePage = ({ service, relatedServices }: { service: Service; relatedSe
         </section>
       )}
 
-      <CTABanner />
+      <CTABanner heading={service.cta_heading} description={service.cta_description} buttonText={service.cta_button_text} buttonLink={service.cta_button_link} />
     </Layout>
   );
 };

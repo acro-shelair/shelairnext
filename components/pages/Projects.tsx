@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Layout from "@/components/Layout";
 import Image from "next/image";
-import { ArrowRight, Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, Search, X, ChevronLeft, ChevronRight, Pin } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CTABanner from "@/components/home/CTABanner";
@@ -34,16 +34,19 @@ const Projects = ({ projects }: { projects: Project[] }) => {
   const debouncedQuery = useDebounce(query, 300);
 
   const filtered = useMemo(() => {
-    if (!debouncedQuery.trim()) return projects;
-    const q = debouncedQuery.toLowerCase();
-    return projects.filter(
-      (p) =>
-        p.title.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.type.toLowerCase().includes(q) ||
-        p.location.toLowerCase().includes(q) ||
-        p.client.toLowerCase().includes(q)
-    );
+    let list = projects;
+    if (debouncedQuery.trim()) {
+      const q = debouncedQuery.toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.type.toLowerCase().includes(q) ||
+          p.location.toLowerCase().includes(q) ||
+          p.client.toLowerCase().includes(q)
+      );
+    }
+    return [...list].sort((a, b) => (a.pinned === b.pinned ? 0 : a.pinned ? -1 : 1));
   }, [projects, debouncedQuery]);
 
   const totalPages = Math.ceil(filtered.length / PROJECTS_PAGE_SIZE);
@@ -146,6 +149,11 @@ const Projects = ({ projects }: { projects: Project[] }) => {
                     </div>
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-3">
+                        {p.pinned && (
+                          <span className="text-xs font-semibold text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30 px-2 py-1 rounded-full flex items-center gap-1">
+                            <Pin className="w-3 h-3" /> Pinned
+                          </span>
+                        )}
                         <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">
                           {p.type}
                         </span>

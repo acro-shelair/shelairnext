@@ -14,8 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (isStandalone) return <>{children}</>;
 
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const user = session?.user;
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) return <>{children}</>;
 
