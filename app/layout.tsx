@@ -9,7 +9,6 @@ import Navbar from "@/components/Navbar";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSiteSettings } from "@/lib/supabase/content";
 import Footer from "@/components/Footer";
-import LoadingScreen from "@/components/LoadingScreen";
 import NavigationProgress from "@/components/NavigationProgress";
 import PublicShell from "@/components/PublicShell";
 
@@ -117,7 +116,6 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <Providers>
-          {!isAdmin && <LoadingScreen />}
           <NavigationProgress />
           <PublicShell
             navbar={
