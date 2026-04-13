@@ -175,6 +175,8 @@ const Navbar = ({
             height={64}
             className="object-contain"
             priority
+            quality={60}
+            sizes="160px"
           />
         </Link>
 

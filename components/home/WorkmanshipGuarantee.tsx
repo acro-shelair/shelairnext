@@ -38,6 +38,10 @@ const WorkmanshipGuarantee = () => {
               <Image
                 src={guaranteeBadge}
                 alt="5 Years Workmanship Guarantee"
+                width={176}
+                height={72}
+                sizes="(min-width: 768px) 176px, 144px"
+                quality={75}
                 className="relative w-36 md:w-44 h-auto drop-shadow-2xl"
               />
             </div>

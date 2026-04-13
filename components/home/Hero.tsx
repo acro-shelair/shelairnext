@@ -95,8 +95,10 @@ const Hero = () => {
                   fill
                   className="object-cover"
                   priority
-                  sizes="(max-width: 1024px) 0px, 50vw"
+                  fetchPriority="high"
+                  sizes="(max-width: 1024px) 1px, 50vw"
                   placeholder="blur"
+                  quality={75}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/25 via-transparent to-transparent" />
               </div>
@@ -113,8 +115,10 @@ const Hero = () => {
                 fill
                 className="object-cover"
                 priority
-                sizes="(max-width: 1024px) 100vw, 0px"
+                fetchPriority="high"
+                sizes="(min-width: 1024px) 1px, 100vw"
                 placeholder="blur"
+                quality={75}
               />
             </div>
           </div>
