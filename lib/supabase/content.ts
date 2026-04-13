@@ -22,11 +22,19 @@ export interface Service {
   process_steps: ServiceStep[];
   faqs: ServiceFaq[];
   related_service_slugs: string[];
+  related_post_slugs: string[];
+  related_project_slugs: string[];
   highlighted: boolean;
   cta_heading: string;
   cta_description: string;
   cta_button_text: string;
   cta_button_link: string;
+  hero_cta_primary_text: string;
+  hero_cta_primary_link: string;
+  hero_cta_phone_text: string;
+  hero_cta_phone_link: string;
+  overview_cta_text: string;
+  overview_cta_link: string;
 }
 
 export async function getAllServices(supabase: SupabaseClient): Promise<Service[]> {

@@ -33,10 +33,18 @@ const schema = z.object({
   process_steps:        z.array(z.object({ step: z.string(), title: z.string(), desc: z.string() })),
   faqs:                 z.array(z.object({ q: z.string(), a: z.string() })),
   related_service_slugs: z.string(),
+  related_post_slugs:    z.string(),
+  related_project_slugs: z.string(),
   cta_heading:     z.string(),
   cta_description: z.string(),
   cta_button_text: z.string(),
   cta_button_link: z.string(),
+  hero_cta_primary_text: z.string(),
+  hero_cta_primary_link: z.string(),
+  hero_cta_phone_text:   z.string(),
+  hero_cta_phone_link:   z.string(),
+  overview_cta_text:     z.string(),
+  overview_cta_link:     z.string(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -70,10 +78,18 @@ export default function ServiceEditor({ service, nextPosition }: { service?: Ser
       process_steps:        (service?.process_steps       as any[])?.map((s) => ({ step: s.step, title: s.title, desc: s.desc })) ?? [],
       faqs:                 (service?.faqs                as any[])?.map((f) => ({ q: f.q, a: f.a })) ?? [],
       related_service_slugs: service?.related_service_slugs?.join(", ") ?? "",
+      related_post_slugs:    service?.related_post_slugs?.join(", ")    ?? "",
+      related_project_slugs: service?.related_project_slugs?.join(", ") ?? "",
       cta_heading:           service?.cta_heading      ?? "",
       cta_description:       service?.cta_description  ?? "",
       cta_button_text:       service?.cta_button_text  ?? "",
       cta_button_link:       service?.cta_button_link  ?? "",
+      hero_cta_primary_text: service?.hero_cta_primary_text ?? "Get a Quote",
+      hero_cta_primary_link: service?.hero_cta_primary_link ?? "/contact",
+      hero_cta_phone_text:   service?.hero_cta_phone_text   ?? "07 3204 9511",
+      hero_cta_phone_link:   service?.hero_cta_phone_link   ?? "tel:0732049511",
+      overview_cta_text:     service?.overview_cta_text     ?? "Discuss Your Needs",
+      overview_cta_link:     service?.overview_cta_link     ?? "/contact",
     },
   });
 
@@ -105,10 +121,18 @@ export default function ServiceEditor({ service, nextPosition }: { service?: Ser
       process_steps:         data.process_steps,
       faqs:                  data.faqs,
       related_service_slugs: data.related_service_slugs.split(",").map((s) => s.trim()).filter(Boolean),
+      related_post_slugs:    data.related_post_slugs.split(",").map((s) => s.trim()).filter(Boolean),
+      related_project_slugs: data.related_project_slugs.split(",").map((s) => s.trim()).filter(Boolean),
       cta_heading:           data.cta_heading,
       cta_description:       data.cta_description,
       cta_button_text:       data.cta_button_text,
       cta_button_link:       data.cta_button_link,
+      hero_cta_primary_text: data.hero_cta_primary_text,
+      hero_cta_primary_link: data.hero_cta_primary_link,
+      hero_cta_phone_text:   data.hero_cta_phone_text,
+      hero_cta_phone_link:   data.hero_cta_phone_link,
+      overview_cta_text:     data.overview_cta_text,
+      overview_cta_link:     data.overview_cta_link,
     };
 
     try {
@@ -223,6 +247,14 @@ export default function ServiceEditor({ service, nextPosition }: { service?: Ser
             <Label>Related Service Slugs <span className="text-muted-foreground font-normal text-xs">comma-separated</span></Label>
             <Input {...register("related_service_slugs")} placeholder="emergency-refrigeration-repairs, cold-room-construction" />
           </div>
+          <div className="space-y-1.5 md:col-span-2">
+            <Label>Related Post Slugs <span className="text-muted-foreground font-normal text-xs">comma-separated</span></Label>
+            <Input {...register("related_post_slugs")} placeholder="choosing-the-right-hvac, cold-room-maintenance-guide" />
+          </div>
+          <div className="space-y-1.5 md:col-span-2">
+            <Label>Related Project Slugs <span className="text-muted-foreground font-normal text-xs">comma-separated</span></Label>
+            <Input {...register("related_project_slugs")} placeholder="woolworths-coldroom-install, acme-hvac-upgrade" />
+          </div>
         </div>
       </section>
 
@@ -245,6 +277,37 @@ export default function ServiceEditor({ service, nextPosition }: { service?: Ser
           <div className="space-y-1.5">
             <Label>CTA Button Link</Label>
             <Input {...register("cta_button_link")} placeholder="/contact" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Hero & Overview Buttons ────────────────────────────────────────── */}
+      <section className="space-y-5">
+        <h2 className="text-base font-semibold border-b border-border pb-2">Hero & Overview Buttons</h2>
+        <div className="grid md:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <Label>Hero Primary Button Text</Label>
+            <Input {...register("hero_cta_primary_text")} placeholder="Get a Quote" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Hero Primary Button Link</Label>
+            <Input {...register("hero_cta_primary_link")} placeholder="/contact" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Hero Phone Button Text</Label>
+            <Input {...register("hero_cta_phone_text")} placeholder="07 3204 9511" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Hero Phone Button Link</Label>
+            <Input {...register("hero_cta_phone_link")} placeholder="tel:0732049511" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Overview Button Text</Label>
+            <Input {...register("overview_cta_text")} placeholder="Discuss Your Needs" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Overview Button Link</Label>
+            <Input {...register("overview_cta_link")} placeholder="/contact" />
           </div>
         </div>
       </section>

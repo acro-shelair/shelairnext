@@ -106,11 +106,6 @@ const Navbar = ({
       href: `/services/${s.slug}`,
       highlighted: s.highlighted,
     })),
-    {
-      label: "Commercial Refrigeration",
-      href: "https://acrorefrigeration.com.au",
-      external: true as const,
-    },
   ];
 
   const industryMenu: MenuItem[] = [
