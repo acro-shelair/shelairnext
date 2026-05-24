@@ -155,3 +155,7 @@
 .animate-scroll {
   animation: scroll 30s linear infinite;
 }
+
+.marquee-wrapper:hover .animate-scroll {
+  animation-play-state: paused;
+}

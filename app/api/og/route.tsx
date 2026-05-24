@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
   const config = typeConfig[type] || typeConfig.default;
 
-  return new ImageResponse(
+  const img = new ImageResponse(
     (
       <div
         style={{
@@ -166,4 +166,11 @@ export async function GET(req: NextRequest) {
       height: 630,
     }
   );
+  return new Response(img.body, {
+    status: 200,
+    headers: {
+      "content-type": "image/png",
+      "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
+    },
+  });
 }
