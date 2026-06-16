@@ -68,7 +68,7 @@ const IndustryPage = ({
             <h1 className="text-4xl md:text-5xl font-extrabold mb-6">{industry.title}</h1>
             <p className="text-lg text-muted-foreground mb-8">{industry.hero_desc || industry.description}</p>
             <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg"><Link href="/contact">Get a Quote <ArrowRight className="w-4 h-4 ml-2" /></Link></Button>
+              <Button asChild size="lg"><Link href="/contact">{industry.label_get_quote || "Get a Quote"} <ArrowRight className="w-4 h-4 ml-2" /></Link></Button>
               <Button asChild size="lg" variant="destructive" className="gradient-cta border-0">
                 <a href="tel:0732049511"><Phone className="w-4 h-4 mr-2" /> 07 3204 9511</a>
               </Button>
@@ -114,8 +114,8 @@ const IndustryPage = ({
         <section className="section-padding bg-background">
           <div className="container-narrow">
             <motion.div className="mb-12" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <h2 className="text-3xl font-extrabold mb-4">Your Challenges</h2>
-              <p className="text-muted-foreground">We understand the unique pressures facing {(industry.subtitle || industry.title).toLowerCase()} businesses.</p>
+              <h2 className="text-3xl font-extrabold mb-4">{industry.challenges_heading || "Your Challenges"}</h2>
+              <p className="text-muted-foreground">{industry.challenges_intro || `We understand the unique pressures facing ${(industry.subtitle || industry.title).toLowerCase()} businesses.`}</p>
             </motion.div>
             <div className="grid md:grid-cols-3 gap-6">
               {challenges.map((c, i) => (
@@ -143,7 +143,7 @@ const IndustryPage = ({
         <section className="section-padding bg-secondary">
           <div className="container-narrow">
             <motion.div className="text-center mb-16" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <h2 className="text-3xl md:text-4xl font-extrabold mb-4">How We Help</h2>
+              <h2 className="text-3xl md:text-4xl font-extrabold mb-4">{industry.services_heading || "How We Help"}</h2>
             </motion.div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {industryServices.map((s, i) => {
@@ -179,20 +179,20 @@ const IndustryPage = ({
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <div className="bg-card rounded-2xl border border-border p-8 md:p-12">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6">
-                  Case Study
+                  {industry.case_study_label || "Case Study"}
                 </div>
                 <h3 className="text-2xl font-extrabold mb-6">{caseStudy.company}</h3>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div>
-                    <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Challenge</h4>
+                    <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">{industry.label_challenge || "Challenge"}</h4>
                     <p className="text-sm leading-relaxed">{caseStudy.challenge}</p>
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Solution</h4>
+                    <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">{industry.label_solution || "Solution"}</h4>
                     <p className="text-sm leading-relaxed">{caseStudy.solution}</p>
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Result</h4>
+                    <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">{industry.label_result || "Result"}</h4>
                     <p className="text-sm leading-relaxed font-medium">{caseStudy.result}</p>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ const IndustryPage = ({
         <section className="section-padding bg-secondary">
           <div className="container-narrow">
             <motion.div className="mb-12" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <h2 className="text-3xl font-extrabold">Other Industries We Serve</h2>
+              <h2 className="text-3xl font-extrabold">{industry.related_heading || "Other Industries We Serve"}</h2>
             </motion.div>
             <div className="grid md:grid-cols-2 gap-6">
               {relatedIndustries.map((ri, i) => (
@@ -224,7 +224,7 @@ const IndustryPage = ({
                     <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">{ri.title}</h3>
                     <p className="text-sm text-muted-foreground mb-4">{ri.description}</p>
                     <span className="text-primary text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Learn More <ArrowRight className="w-4 h-4" />
+                      {industry.label_learn_more || "Learn More"} <ArrowRight className="w-4 h-4" />
                     </span>
                   </Link>
                 </motion.div>

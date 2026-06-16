@@ -14,40 +14,69 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { PlusCircle, Trash2, Upload, X, ImageIcon } from "lucide-react";
 import { convertToWebp } from "@/lib/convertToWebp";
 
 function toSlug(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 const schema = z.object({
-  icon_name:    z.string().min(1),
-  title:        z.string().min(1, "Required"),
-  slug:         z.string().min(1, "Required").regex(/^[a-z0-9-]+$/),
-  short_desc:   z.string().min(1, "Required"),
-  description:  z.string().min(1, "Required"),
-  features:     z.array(z.object({ text: z.string() })),
-  position:     z.coerce.number().int().min(0),
+  icon_name: z.string().min(1),
+  title: z.string().min(1, "Required"),
+  slug: z
+    .string()
+    .min(1, "Required")
+    .regex(/^[a-z0-9-]+$/),
+  short_desc: z.string().min(1, "Required"),
+  description: z.string().min(1, "Required"),
+  features: z.array(z.object({ text: z.string() })),
+  position: z.coerce.number().int().min(0),
   // Detail page
-  subtitle:          z.string(),
-  hero_desc:         z.string(),
-  meta_description:  z.string(),
+  subtitle: z.string(),
+  hero_desc: z.string(),
+  meta_description: z.string(),
   related_industry_slugs: z.string(),
-  stats:             z.array(z.object({ value: z.string(), label: z.string() })),
-  challenges:        z.array(z.object({ title: z.string(), desc: z.string() })),
-  industry_services: z.array(z.object({ icon_name: z.string(), title: z.string(), desc: z.string() })),
-  case_study_company:   z.string(),
+  stats: z.array(z.object({ value: z.string(), label: z.string() })),
+  challenges: z.array(z.object({ title: z.string(), desc: z.string() })),
+  industry_services: z.array(
+    z.object({ icon_name: z.string(), title: z.string(), desc: z.string() })
+  ),
+  case_study_company: z.string(),
   case_study_challenge: z.string(),
-  case_study_solution:  z.string(),
-  case_study_result:    z.string(),
+  case_study_solution: z.string(),
+  case_study_result: z.string(),
+  // Section headings & labels
+  label_get_quote: z.string(),
+  challenges_heading: z.string(),
+  challenges_intro: z.string(),
+  services_heading: z.string(),
+  case_study_label: z.string(),
+  label_challenge: z.string(),
+  label_solution: z.string(),
+  label_result: z.string(),
+  related_heading: z.string(),
+  label_learn_more: z.string(),
 });
 
 type FormData = z.infer<typeof schema>;
 
-export default function IndustryEditor({ industry, nextPosition }: { industry?: Industry; nextPosition?: number }) {
+export default function IndustryEditor({
+  industry,
+  nextPosition,
+}: {
+  industry?: Industry;
+  nextPosition?: number;
+}) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -55,37 +84,68 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
   const [imageUrl, setImageUrl] = useState<string>(industry?.image_url ?? "");
   const isEdit = !!industry;
 
-  const { register, handleSubmit, control, watch, setValue, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      icon_name:    industry?.icon_name    ?? "Building2",
-      title:        industry?.title        ?? "",
-      slug:         industry?.slug         ?? "",
-      short_desc:   industry?.short_desc   ?? "",
-      description:  industry?.description  ?? "",
-      features:     industry?.features?.map((t) => ({ text: t })) ?? [],
-      position:     industry?.position     ?? nextPosition ?? 0,
-      subtitle:          industry?.subtitle          ?? "",
-      hero_desc:         industry?.hero_desc          ?? "",
-      meta_description:  industry?.meta_description   ?? "",
-      related_industry_slugs: industry?.related_industry_slugs?.join(", ") ?? "",
-      stats:             (industry?.stats as any[])?.map((s) => ({ value: s.value, label: s.label })) ?? [],
-      challenges:        (industry?.challenges as any[])?.map((c) => ({ title: c.title, desc: c.desc })) ?? [],
-      industry_services: (industry?.industry_services as any[])?.map((s) => ({ icon_name: s.icon_name, title: s.title, desc: s.desc })) ?? [],
-      case_study_company:   (industry?.case_study as any)?.company   ?? "",
+      icon_name: industry?.icon_name ?? "Building2",
+      title: industry?.title ?? "",
+      slug: industry?.slug ?? "",
+      short_desc: industry?.short_desc ?? "",
+      description: industry?.description ?? "",
+      features: industry?.features?.map((t) => ({ text: t })) ?? [],
+      position: industry?.position ?? nextPosition ?? 0,
+      subtitle: industry?.subtitle ?? "",
+      hero_desc: industry?.hero_desc ?? "",
+      meta_description: industry?.meta_description ?? "",
+      related_industry_slugs:
+        industry?.related_industry_slugs?.join(", ") ?? "",
+      stats:
+        (industry?.stats as any[])?.map((s) => ({
+          value: s.value,
+          label: s.label,
+        })) ?? [],
+      challenges:
+        (industry?.challenges as any[])?.map((c) => ({
+          title: c.title,
+          desc: c.desc,
+        })) ?? [],
+      industry_services:
+        (industry?.industry_services as any[])?.map((s) => ({
+          icon_name: s.icon_name,
+          title: s.title,
+          desc: s.desc,
+        })) ?? [],
+      case_study_company: (industry?.case_study as any)?.company ?? "",
       case_study_challenge: (industry?.case_study as any)?.challenge ?? "",
-      case_study_solution:  (industry?.case_study as any)?.solution  ?? "",
-      case_study_result:    (industry?.case_study as any)?.result    ?? "",
+      case_study_solution: (industry?.case_study as any)?.solution ?? "",
+      case_study_result: (industry?.case_study as any)?.result ?? "",
+      label_get_quote: industry?.label_get_quote ?? "Get a Quote",
+      challenges_heading: industry?.challenges_heading ?? "Your Challenges",
+      challenges_intro: industry?.challenges_intro ?? "",
+      services_heading: industry?.services_heading ?? "How We Help",
+      case_study_label: industry?.case_study_label ?? "Case Study",
+      label_challenge: industry?.label_challenge ?? "Challenge",
+      label_solution: industry?.label_solution ?? "Solution",
+      label_result: industry?.label_result ?? "Result",
+      related_heading: industry?.related_heading ?? "Other Industries We Serve",
+      label_learn_more: industry?.label_learn_more ?? "Learn More",
     },
   });
 
   const selectedIcon = watch("icon_name");
   const PreviewIcon = getIcon(selectedIcon);
 
-  const features   = useFieldArray({ control, name: "features" });
-  const stats      = useFieldArray({ control, name: "stats" });
+  const features = useFieldArray({ control, name: "features" });
+  const stats = useFieldArray({ control, name: "stats" });
   const challenges = useFieldArray({ control, name: "challenges" });
-  const services   = useFieldArray({ control, name: "industry_services" });
+  const services = useFieldArray({ control, name: "industry_services" });
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -99,7 +159,9 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
         .from("project-images")
         .upload(path, converted, { upsert: true });
       if (uploadError) throw uploadError;
-      const { data } = supabase.storage.from("project-images").getPublicUrl(path);
+      const { data } = supabase.storage
+        .from("project-images")
+        .getPublicUrl(path);
       setImageUrl(data.publicUrl);
     } catch (e: unknown) {
       setServerError(e instanceof Error ? e.message : "Upload failed.");
@@ -116,38 +178,64 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
 
     const hasCaseStudy = data.case_study_company.trim();
     const payload = {
-      icon_name:    data.icon_name,
-      title:        data.title,
-      slug:         data.slug,
-      short_desc:   data.short_desc,
-      description:  data.description,
-      features:     data.features.map((f) => f.text).filter(Boolean),
-      position:     data.position,
-      subtitle:          data.subtitle,
-      hero_desc:         data.hero_desc,
-      meta_description:  data.meta_description,
-      related_industry_slugs: data.related_industry_slugs.split(",").map((s) => s.trim()).filter(Boolean),
-      stats:             data.stats,
-      challenges:        data.challenges,
+      icon_name: data.icon_name,
+      title: data.title,
+      slug: data.slug,
+      short_desc: data.short_desc,
+      description: data.description,
+      features: data.features.map((f) => f.text).filter(Boolean),
+      position: data.position,
+      subtitle: data.subtitle,
+      hero_desc: data.hero_desc,
+      meta_description: data.meta_description,
+      related_industry_slugs: data.related_industry_slugs
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      stats: data.stats,
+      challenges: data.challenges,
       industry_services: data.industry_services,
       image_url: imageUrl || null,
-      case_study: hasCaseStudy ? {
-        company:   data.case_study_company,
-        challenge: data.case_study_challenge,
-        solution:  data.case_study_solution,
-        result:    data.case_study_result,
-      } : null,
+      case_study: hasCaseStudy
+        ? {
+            company: data.case_study_company,
+            challenge: data.case_study_challenge,
+            solution: data.case_study_solution,
+            result: data.case_study_result,
+          }
+        : null,
+      label_get_quote: data.label_get_quote,
+      challenges_heading: data.challenges_heading,
+      challenges_intro: data.challenges_intro,
+      services_heading: data.services_heading,
+      case_study_label: data.case_study_label,
+      label_challenge: data.label_challenge,
+      label_solution: data.label_solution,
+      label_result: data.label_result,
+      related_heading: data.related_heading,
+      label_learn_more: data.label_learn_more,
     };
 
     try {
       if (isEdit) {
-        const { error } = await supabase.from("industries").update(payload).eq("id", industry.id);
+        const { error } = await supabase
+          .from("industries")
+          .update(payload)
+          .eq("id", industry.id);
         if (error) throw error;
-        await logActivity("update", "industries", `Updated industry: ${data.title}`);
+        await logActivity(
+          "update",
+          "industries",
+          `Updated industry: ${data.title}`
+        );
       } else {
         const { error } = await supabase.from("industries").insert(payload);
         if (error) throw error;
-        await logActivity("create", "industries", `Created industry: ${data.title}`);
+        await logActivity(
+          "create",
+          "industries",
+          `Created industry: ${data.title}`
+        );
       }
       router.push("/admin/industries");
       router.refresh();
@@ -162,18 +250,35 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-10 pb-16">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">{isEdit ? "Edit Industry" : "New Industry"}</h1>
+        <h1 className="text-2xl font-bold">
+          {isEdit ? "Edit Industry" : "New Industry"}
+        </h1>
         <div className="flex items-center gap-3">
-          <Button type="button" variant="outline" onClick={() => router.back()} disabled={saving}>Cancel</Button>
-          <Button type="submit" disabled={saving || uploading}>{saving ? "Saving…" : uploading ? "Uploading…" : "Save Industry"}</Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.back()}
+            disabled={saving}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={saving || uploading}>
+            {saving ? "Saving…" : uploading ? "Uploading…" : "Save Industry"}
+          </Button>
         </div>
       </div>
 
-      {serverError && <p className="text-sm text-destructive bg-destructive/10 px-4 py-3 rounded-lg">{serverError}</p>}
+      {serverError && (
+        <p className="text-sm text-destructive bg-destructive/10 px-4 py-3 rounded-lg">
+          {serverError}
+        </p>
+      )}
 
       {/* ── Card Info ────────────────────────────────────────────────────────── */}
       <section className="space-y-5">
-        <h2 className="text-base font-semibold border-b border-border pb-2">Card Info</h2>
+        <h2 className="text-base font-semibold border-b border-border pb-2">
+          Card Info
+        </h2>
 
         {/* Icon picker */}
         <div className="space-y-3">
@@ -182,66 +287,134 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
               <PreviewIcon className="w-6 h-6 text-primary" />
             </div>
-            <span className="text-sm text-muted-foreground">Selected: <span className="font-medium text-foreground">{selectedIcon}</span></span>
+            <span className="text-sm text-muted-foreground">
+              Selected:{" "}
+              <span className="font-medium text-foreground">
+                {selectedIcon}
+              </span>
+            </span>
           </div>
-          <Controller control={control} name="icon_name" render={({ field }) => (
-            <div className="grid grid-cols-8 gap-2">
-              {ICON_OPTIONS.map(({ name, icon: Icon }) => (
-                <button key={name} type="button" title={name} onClick={() => field.onChange(name)}
-                  className={`aspect-square rounded-lg flex items-center justify-center transition-colors border ${
-                    field.value === name
-                      ? "bg-primary text-white border-primary"
-                      : "bg-secondary text-muted-foreground border-transparent hover:border-border hover:text-foreground"
-                  }`}>
-                  <Icon className="w-4 h-4" />
-                </button>
-              ))}
-            </div>
-          )} />
+          <Controller
+            control={control}
+            name="icon_name"
+            render={({ field }) => (
+              <div className="grid grid-cols-8 gap-2">
+                {ICON_OPTIONS.map(({ name, icon: Icon }) => (
+                  <button
+                    key={name}
+                    type="button"
+                    title={name}
+                    onClick={() => field.onChange(name)}
+                    className={`aspect-square rounded-lg flex items-center justify-center transition-colors border ${
+                      field.value === name
+                        ? "bg-primary text-white border-primary"
+                        : "bg-secondary text-muted-foreground border-transparent hover:border-border hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </button>
+                ))}
+              </div>
+            )}
+          />
         </div>
 
         <div className="grid md:grid-cols-2 gap-5">
           <div className="space-y-1.5 md:col-span-2">
             <Label>Title</Label>
-            <Input {...register("title")}
-              onBlur={(e) => { if (!isEdit) setValue("slug", toSlug(e.target.value)); }}
-              placeholder="Restaurants & Hospitality" />
-            {errors.title && <p className="text-xs text-destructive">{errors.title.message}</p>}
+            <Input
+              {...register("title")}
+              onBlur={(e) => {
+                if (!isEdit) setValue("slug", toSlug(e.target.value));
+              }}
+              placeholder="Restaurants & Hospitality"
+            />
+            {errors.title && (
+              <p className="text-xs text-destructive">{errors.title.message}</p>
+            )}
           </div>
           <div className="space-y-1.5">
             <Label>Slug</Label>
-            <Input {...register("slug")} placeholder="restaurants-hospitality" />
-            {errors.slug && <p className="text-xs text-destructive">{errors.slug.message}</p>}
+            <Input
+              {...register("slug")}
+              placeholder="restaurants-hospitality"
+            />
+            {errors.slug && (
+              <p className="text-xs text-destructive">{errors.slug.message}</p>
+            )}
           </div>
           <div className="space-y-1.5 max-w-[120px]">
             <Label>Position</Label>
             <Input type="number" min={0} {...register("position")} />
           </div>
           <div className="space-y-1.5 md:col-span-2">
-            <Label>Short Description <span className="text-muted-foreground font-normal text-xs">(shown on home section card)</span></Label>
-            <Input {...register("short_desc")} placeholder="Walk-in coolrooms and freezers built for commercial kitchens." />
-            {errors.short_desc && <p className="text-xs text-destructive">{errors.short_desc.message}</p>}
+            <Label>
+              Short Description{" "}
+              <span className="text-muted-foreground font-normal text-xs">
+                (shown on home section card)
+              </span>
+            </Label>
+            <Input
+              {...register("short_desc")}
+              placeholder="Walk-in coolrooms and freezers built for commercial kitchens."
+            />
+            {errors.short_desc && (
+              <p className="text-xs text-destructive">
+                {errors.short_desc.message}
+              </p>
+            )}
           </div>
           <div className="space-y-1.5 md:col-span-2">
-            <Label>Full Description <span className="text-muted-foreground font-normal text-xs">(shown on industries listing page)</span></Label>
-            <Textarea {...register("description")} rows={3} className="resize-none" />
-            {errors.description && <p className="text-xs text-destructive">{errors.description.message}</p>}
+            <Label>
+              Full Description{" "}
+              <span className="text-muted-foreground font-normal text-xs">
+                (shown on industries listing page)
+              </span>
+            </Label>
+            <Textarea
+              {...register("description")}
+              rows={3}
+              className="resize-none"
+            />
+            {errors.description && (
+              <p className="text-xs text-destructive">
+                {errors.description.message}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Features */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label>Features <span className="text-muted-foreground font-normal text-xs">(shown as pills on the card)</span></Label>
-            <Button type="button" size="sm" variant="outline" onClick={() => features.append({ text: "" })}>
+            <Label>
+              Features{" "}
+              <span className="text-muted-foreground font-normal text-xs">
+                (shown as pills on the card)
+              </span>
+            </Label>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => features.append({ text: "" })}
+            >
               <PlusCircle className="w-3.5 h-3.5 mr-1" /> Add
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-2">
             {features.fields.map((f, i) => (
               <div key={f.id} className="flex gap-2">
-                <Input {...register(`features.${i}.text`)} placeholder={`Feature ${i + 1}`} />
-                <Button type="button" size="sm" variant="ghost" onClick={() => features.remove(i)}>
+                <Input
+                  {...register(`features.${i}.text`)}
+                  placeholder={`Feature ${i + 1}`}
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => features.remove(i)}
+                >
                   <Trash2 className="w-3.5 h-3.5 text-destructive" />
                 </Button>
               </div>
@@ -250,10 +423,19 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
         </div>
         {/* Image */}
         <div className="space-y-3">
-          <Label>Cover Image <span className="text-muted-foreground font-normal text-xs">(optional — shown on the industries listing page)</span></Label>
+          <Label>
+            Cover Image{" "}
+            <span className="text-muted-foreground font-normal text-xs">
+              (optional — shown on the industries listing page)
+            </span>
+          </Label>
           {imageUrl ? (
             <div className="relative w-full rounded-xl overflow-hidden border border-border">
-              <img src={imageUrl} alt="Industry" className="w-full h-48 object-cover" />
+              <img
+                src={imageUrl}
+                alt="Industry"
+                className="w-full h-48 object-cover"
+              />
               <button
                 type="button"
                 onClick={() => setImageUrl("")}
@@ -263,16 +445,26 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
               </button>
             </div>
           ) : (
-            <label className={`flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors ${uploading ? "opacity-60 pointer-events-none" : ""}`}>
+            <label
+              className={`flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors ${
+                uploading ? "opacity-60 pointer-events-none" : ""
+              }`}
+            >
               {uploading ? (
-                <span className="text-sm text-muted-foreground">Uploading…</span>
+                <span className="text-sm text-muted-foreground">
+                  Uploading…
+                </span>
               ) : (
                 <>
                   <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
                     <Upload className="w-4 h-4 text-primary" />
                   </div>
-                  <span className="text-sm font-medium">Click to upload image</span>
-                  <span className="text-xs text-muted-foreground">JPG, PNG, WebP — converted to WebP</span>
+                  <span className="text-sm font-medium">
+                    Click to upload image
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    JPG, PNG, WebP — converted to WebP
+                  </span>
                 </>
               )}
               <input
@@ -289,23 +481,125 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
 
       {/* ── Detail Page ───────────────────────────────────────────────────────── */}
       <section className="space-y-5">
-        <h2 className="text-base font-semibold border-b border-border pb-2">Detail Page</h2>
+        <h2 className="text-base font-semibold border-b border-border pb-2">
+          Detail Page
+        </h2>
         <div className="grid md:grid-cols-2 gap-5">
           <div className="space-y-1.5">
-            <Label>Subtitle <span className="text-muted-foreground font-normal text-xs">(badge text)</span></Label>
-            <Input {...register("subtitle")} placeholder="Restaurants & Hospitality" />
+            <Label>
+              Subtitle{" "}
+              <span className="text-muted-foreground font-normal text-xs">
+                (badge text)
+              </span>
+            </Label>
+            <Input
+              {...register("subtitle")}
+              placeholder="Restaurants & Hospitality"
+            />
           </div>
           <div className="space-y-1.5 md:col-span-2">
             <Label>Hero Description</Label>
-            <Textarea {...register("hero_desc")} rows={2} className="resize-none" />
+            <Textarea
+              {...register("hero_desc")}
+              rows={2}
+              className="resize-none"
+            />
           </div>
           <div className="space-y-1.5 md:col-span-2">
-            <Label>Meta Description <span className="text-muted-foreground font-normal text-xs">SEO — under 160 chars</span></Label>
-            <Textarea {...register("meta_description")} rows={2} className="resize-none" />
+            <Label>
+              Meta Description{" "}
+              <span className="text-muted-foreground font-normal text-xs">
+                SEO — under 160 chars
+              </span>
+            </Label>
+            <Textarea
+              {...register("meta_description")}
+              rows={2}
+              className="resize-none"
+            />
           </div>
           <div className="space-y-1.5 md:col-span-2">
-            <Label>Related Industry Slugs <span className="text-muted-foreground font-normal text-xs">comma-separated</span></Label>
-            <Input {...register("related_industry_slugs")} placeholder="supermarkets-retail, food-production" />
+            <Label>
+              Related Industry Slugs{" "}
+              <span className="text-muted-foreground font-normal text-xs">
+                comma-separated
+              </span>
+            </Label>
+            <Input
+              {...register("related_industry_slugs")}
+              placeholder="supermarkets-retail, food-production"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section Headings & Labels ─────────────────────────────────────────── */}
+      <section className="space-y-5">
+        <h2 className="text-base font-semibold border-b border-border pb-2">
+          Section Headings &amp; Labels{" "}
+          <span className="text-muted-foreground font-normal text-sm">
+            (text shown on the detail page)
+          </span>
+        </h2>
+        <div className="grid md:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <Label>Hero Button</Label>
+            <Input {...register("label_get_quote")} placeholder="Get a Quote" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Challenges Heading</Label>
+            <Input
+              {...register("challenges_heading")}
+              placeholder="Your Challenges"
+            />
+          </div>
+          <div className="space-y-1.5 md:col-span-2">
+            <Label>
+              Challenges Intro{" "}
+              <span className="text-muted-foreground font-normal text-xs">
+                (blank = &ldquo;We understand the unique pressures facing …
+                businesses.&rdquo;)
+              </span>
+            </Label>
+            <Textarea
+              {...register("challenges_intro")}
+              rows={2}
+              className="resize-none"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Services Heading</Label>
+            <Input
+              {...register("services_heading")}
+              placeholder="How We Help"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Related Section Heading</Label>
+            <Input
+              {...register("related_heading")}
+              placeholder="Other Industries We Serve"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Related Card Link</Label>
+            <Input {...register("label_learn_more")} placeholder="Learn More" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Case Study Badge</Label>
+            <Input {...register("case_study_label")} placeholder="Case Study" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Case Study — Challenge Label</Label>
+            <Input {...register("label_challenge")} placeholder="Challenge" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Case Study — Solution Label</Label>
+            <Input {...register("label_solution")} placeholder="Solution" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Case Study — Result Label</Label>
+            <Input {...register("label_result")} placeholder="Result" />
           </div>
         </div>
       </section>
@@ -314,21 +608,37 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
       <section className="space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-2">
           <h2 className="text-base font-semibold">Stats</h2>
-          <Button type="button" size="sm" variant="outline" onClick={() => stats.append({ value: "", label: "" })}>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => stats.append({ value: "", label: "" })}
+          >
             <PlusCircle className="w-3.5 h-3.5 mr-1" /> Add
           </Button>
         </div>
         {stats.fields.map((f, i) => (
-          <div key={f.id} className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end">
+          <div
+            key={f.id}
+            className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end"
+          >
             <div className="space-y-1.5">
               {i === 0 && <Label>Value</Label>}
               <Input {...register(`stats.${i}.value`)} placeholder="2hr" />
             </div>
             <div className="space-y-1.5">
               {i === 0 && <Label>Label</Label>}
-              <Input {...register(`stats.${i}.label`)} placeholder="Avg Response" />
+              <Input
+                {...register(`stats.${i}.label`)}
+                placeholder="Avg Response"
+              />
             </div>
-            <Button type="button" size="sm" variant="ghost" onClick={() => stats.remove(i)}>
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => stats.remove(i)}
+            >
               <Trash2 className="w-3.5 h-3.5 text-destructive" />
             </Button>
           </div>
@@ -339,20 +649,37 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
       <section className="space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-2">
           <h2 className="text-base font-semibold">Challenges</h2>
-          <Button type="button" size="sm" variant="outline" onClick={() => challenges.append({ title: "", desc: "" })}>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => challenges.append({ title: "", desc: "" })}
+          >
             <PlusCircle className="w-3.5 h-3.5 mr-1" /> Add
           </Button>
         </div>
         {challenges.fields.map((f, i) => (
           <div key={f.id} className="bg-secondary rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-muted-foreground">Challenge {i + 1}</span>
-              <Button type="button" size="sm" variant="ghost" onClick={() => challenges.remove(i)}>
+              <span className="text-sm font-medium text-muted-foreground">
+                Challenge {i + 1}
+              </span>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => challenges.remove(i)}
+              >
                 <Trash2 className="w-3.5 h-3.5 text-destructive" />
               </Button>
             </div>
             <Input {...register(`challenges.${i}.title`)} placeholder="Title" />
-            <Textarea {...register(`challenges.${i}.desc`)} rows={2} className="resize-none" placeholder="Description" />
+            <Textarea
+              {...register(`challenges.${i}.desc`)}
+              rows={2}
+              className="resize-none"
+              placeholder="Description"
+            />
           </div>
         ))}
       </section>
@@ -360,41 +687,74 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
       {/* ── Services on Page ──────────────────────────────────────────────────── */}
       <section className="space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-2">
-          <h2 className="text-base font-semibold">How We Help <span className="text-muted-foreground font-normal text-sm">(services shown on this industry page)</span></h2>
-          <Button type="button" size="sm" variant="outline" onClick={() => services.append({ icon_name: "Wrench", title: "", desc: "" })}>
+          <h2 className="text-base font-semibold">
+            How We Help{" "}
+            <span className="text-muted-foreground font-normal text-sm">
+              (services shown on this industry page)
+            </span>
+          </h2>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() =>
+              services.append({ icon_name: "Wrench", title: "", desc: "" })
+            }
+          >
             <PlusCircle className="w-3.5 h-3.5 mr-1" /> Add
           </Button>
         </div>
         {services.fields.map((f, i) => (
           <div key={f.id} className="bg-secondary rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-muted-foreground">Service {i + 1}</span>
-              <Button type="button" size="sm" variant="ghost" onClick={() => services.remove(i)}>
+              <span className="text-sm font-medium text-muted-foreground">
+                Service {i + 1}
+              </span>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => services.remove(i)}
+              >
                 <Trash2 className="w-3.5 h-3.5 text-destructive" />
               </Button>
             </div>
             <div className="grid grid-cols-[auto_1fr] gap-3 items-end">
               <div className="space-y-1.5">
                 <Label className="text-xs">Icon</Label>
-                <Controller control={control} name={`industry_services.${i}.icon_name`} render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-36">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ICON_OPTIONS.map(({ name }) => (
-                        <SelectItem key={name} value={name}>{name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )} />
+                <Controller
+                  control={control}
+                  name={`industry_services.${i}.icon_name`}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-36">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ICON_OPTIONS.map(({ name }) => (
+                          <SelectItem key={name} value={name}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
               <div className="space-y-1.5">
                 <Label className="text-xs">Title</Label>
-                <Input {...register(`industry_services.${i}.title`)} placeholder="Service title" />
+                <Input
+                  {...register(`industry_services.${i}.title`)}
+                  placeholder="Service title"
+                />
               </div>
             </div>
-            <Textarea {...register(`industry_services.${i}.desc`)} rows={2} className="resize-none" placeholder="Service description" />
+            <Textarea
+              {...register(`industry_services.${i}.desc`)}
+              rows={2}
+              className="resize-none"
+              placeholder="Service description"
+            />
           </div>
         ))}
       </section>
@@ -402,24 +762,45 @@ export default function IndustryEditor({ industry, nextPosition }: { industry?: 
       {/* ── Case Study ────────────────────────────────────────────────────────── */}
       <section className="space-y-4">
         <h2 className="text-base font-semibold border-b border-border pb-2">
-          Case Study <span className="text-muted-foreground font-normal text-sm">(leave company blank to hide)</span>
+          Case Study{" "}
+          <span className="text-muted-foreground font-normal text-sm">
+            (leave company blank to hide)
+          </span>
         </h2>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-1.5 md:col-span-2">
             <Label>Company Name</Label>
-            <Input {...register("case_study_company")} placeholder="e.g. FreshMart Supermarkets" />
+            <Input
+              {...register("case_study_company")}
+              placeholder="e.g. FreshMart Supermarkets"
+            />
           </div>
           <div className="space-y-1.5">
             <Label>Challenge</Label>
-            <Textarea {...register("case_study_challenge")} rows={3} className="resize-none" placeholder="What problem did they have?" />
+            <Textarea
+              {...register("case_study_challenge")}
+              rows={3}
+              className="resize-none"
+              placeholder="What problem did they have?"
+            />
           </div>
           <div className="space-y-1.5">
             <Label>Solution</Label>
-            <Textarea {...register("case_study_solution")} rows={3} className="resize-none" placeholder="What did you do?" />
+            <Textarea
+              {...register("case_study_solution")}
+              rows={3}
+              className="resize-none"
+              placeholder="What did you do?"
+            />
           </div>
           <div className="space-y-1.5 md:col-span-2">
             <Label>Result</Label>
-            <Textarea {...register("case_study_result")} rows={2} className="resize-none" placeholder="What was the outcome?" />
+            <Textarea
+              {...register("case_study_result")}
+              rows={2}
+              className="resize-none"
+              placeholder="What was the outcome?"
+            />
           </div>
         </div>
       </section>

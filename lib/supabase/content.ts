@@ -91,6 +91,17 @@ export interface Industry {
   case_study: IndustryCaseStudy | null;
   related_industry_slugs: string[];
   image_url: string | null;
+  // Detail page section headings & labels
+  label_get_quote: string;
+  challenges_heading: string;
+  challenges_intro: string;
+  services_heading: string;
+  case_study_label: string;
+  label_challenge: string;
+  label_solution: string;
+  label_result: string;
+  related_heading: string;
+  label_learn_more: string;
 }
 
 export async function getAllIndustries(supabase: SupabaseClient): Promise<Industry[]> {
