@@ -260,6 +260,17 @@ export interface SiteSettings {
   footer_company_links: FooterLink[];
   business_hours: string;
   emergency_text: string;
+  footer_credentials: string;
+  footer_partner_label: string;
+  footer_partner_url: string;
+  footer_services_partner_label: string;
+  footer_services_partner_url: string;
+  footer_brand_name: string;
+  footer_heading_services: string;
+  footer_heading_industries: string;
+  footer_heading_company: string;
+  footer_brands_heading: string;
+  footer_brands_links: FooterLink[];
   updated_at: string;
 }
 

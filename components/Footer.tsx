@@ -56,6 +56,22 @@ const DEFAULTS = {
   facebook_url: "https://www.facebook.com/shelair/",
   linkedin_url: "https://www.linkedin.com/company/shelair/",
   instagram_url: "",
+  footer_credentials:
+    "ARCtick AU61340 · QBCC 15413155 · Electrical Contractor 92536 · NSW Contractor 479925C · NECA Member · Veteran Community Business",
+  footer_partner_label: "HVACR Group",
+  footer_partner_url: "https://hvacrgroup.com.au",
+  footer_services_partner_label: "Commercial Refrigeration",
+  footer_services_partner_url: "https://acrorefrigeration.com.au",
+  footer_brand_name: "HVACR Pty Ltd",
+  footer_heading_services: "Services",
+  footer_heading_industries: "Service Areas",
+  footer_heading_company: "Company",
+  footer_brands_heading: "Our Brands",
+  footer_brands_links: [
+    { label: "Acro Refrigeration", href: "https://acrorefrigeration.com.au" },
+    { label: "Koolacube", href: "https://koolacube.com.au" },
+    { label: "HVACR Group", href: "https://hvacrgroup.com.au" },
+  ] as FooterLink[],
   footer_company_links: [
     { label: "About Shelair", href: "/about" },
     { label: "Shelair Insights", href: "/resources" },
@@ -131,6 +147,28 @@ const Footer = () => {
   const companyLinks =
     (settings.footer_company_links as FooterLink[] | undefined) ??
     DEFAULTS.footer_company_links;
+  const credentials = settings.footer_credentials ?? DEFAULTS.footer_credentials;
+  const partnerLabel =
+    settings.footer_partner_label ?? DEFAULTS.footer_partner_label;
+  const partnerUrl = settings.footer_partner_url ?? DEFAULTS.footer_partner_url;
+  const servicesPartnerLabel =
+    settings.footer_services_partner_label ??
+    DEFAULTS.footer_services_partner_label;
+  const servicesPartnerUrl =
+    settings.footer_services_partner_url ??
+    DEFAULTS.footer_services_partner_url;
+  const brandName = settings.footer_brand_name ?? DEFAULTS.footer_brand_name;
+  const headingServices =
+    settings.footer_heading_services ?? DEFAULTS.footer_heading_services;
+  const headingIndustries =
+    settings.footer_heading_industries ?? DEFAULTS.footer_heading_industries;
+  const headingCompany =
+    settings.footer_heading_company ?? DEFAULTS.footer_heading_company;
+  const brandsHeading =
+    settings.footer_brands_heading ?? DEFAULTS.footer_brands_heading;
+  const brandsLinks =
+    (settings.footer_brands_links as FooterLink[] | undefined) ??
+    DEFAULTS.footer_brands_links;
 
   const serviceLinks =
     services.length > 0
@@ -151,7 +189,11 @@ const Footer = () => {
   return (
     <footer className="bg-dark text-dark-foreground">
       <div className="container-narrow section-padding">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-16">
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 mb-10 md:mb-16 ${
+            brandsLinks.length > 0 ? "lg:grid-cols-5" : "lg:grid-cols-4"
+          }`}
+        >
           {/* Brand + Contact */}
           <div>
             <div className="flex items-center gap-2 font-extrabold text-xl mb-4">
@@ -225,7 +267,7 @@ const Footer = () => {
           {/* Services */}
           <div>
             <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/40">
-              Services
+              {headingServices}
             </h4>
             <ul className="space-y-2.5 text-sm text-dark-foreground/60">
               {serviceLinks.map((s) => (
@@ -238,23 +280,25 @@ const Footer = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <a
-                  href="https://acrorefrigeration.com.au"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
-                >
-                  Commercial Refrigeration
-                </a>
-              </li>
+              {servicesPartnerUrl && servicesPartnerLabel && (
+                <li>
+                  <a
+                    href={servicesPartnerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary transition-colors"
+                  >
+                    {servicesPartnerLabel}
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
 
           {/* Service Areas */}
           <div>
             <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/40">
-              Service Areas
+              {headingIndustries}
             </h4>
             <ul className="space-y-2.5 text-sm text-dark-foreground/60">
               {industryLinks.map((i) => (
@@ -273,7 +317,7 @@ const Footer = () => {
           {/* Company */}
           <div>
             <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/40">
-              Company
+              {headingCompany}
             </h4>
             <ul className="space-y-2.5 text-sm text-dark-foreground/60">
               {companyLinks.map((link) => (
@@ -286,33 +330,56 @@ const Footer = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <a
-                  href="https://hvacrgroup.com.au"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
-                >
-                  HVACR Group
-                </a>
-              </li>
+              {partnerUrl && partnerLabel && (
+                <li>
+                  <a
+                    href={partnerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary transition-colors"
+                  >
+                    {partnerLabel}
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
+
+          {/* Our Brands (external backlinks) */}
+          {brandsLinks.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-dark-foreground/40">
+                {brandsHeading}
+              </h4>
+              <ul className="space-y-2.5 text-sm text-dark-foreground/60">
+                {brandsLinks.map((link) => (
+                  <li key={link.href + link.label}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Credentials line */}
         <div className="border-t border-dark-foreground/10 pt-6 pb-4 text-center">
           <p className="text-[11px] text-dark-foreground/30 leading-relaxed">
-            ARCtick AU61340 &middot; QBCC 15413155 &middot; Electrical
-            Contractor 92536 &middot; NSW Contractor 479925C &middot; NECA
-            Member &middot; Veteran Community Business
+            {credentials}
           </p>
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-dark-foreground/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-dark-foreground/40">
           <p>
-            © {new Date().getFullYear()} HVACR Pty Ltd. All rights reserved. ABN{" "}
+            © {new Date().getFullYear()} {brandName}. All rights reserved. ABN{" "}
             {abn}
           </p>
           <div className="flex items-center gap-6">
