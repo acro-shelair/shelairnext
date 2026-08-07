@@ -28,14 +28,14 @@ export interface HeroStat {
 }
 
 export const hero = {
-  badge: "Call Now. We can be there today",
-  heading: "One Contractor for",
-  headingHighlight: " Refrigeration, HVAC, & Beer Systems",
-  headingEnd: ": Keeping Critical Commercial Systems Running 24/7",
+  badge: "Commercial HVAC • Brisbane • Gold Coast • Sunshine Coast",
+  heading: "Commercial Air Conditioning",
+  headingHighlight: " That Keeps Business Running",
+  headingEnd: "Repairs, maintenance, replacements and installations for commercial sites across South-East Queensland.",
   subheading:
-    "From cold rooms and air conditioning to beer systems and glycol lines, we repair, maintain and install essential systems your business depends on - with fast response when failure is not an option. ",
-  primaryCta: { label: "Get a Quote", href: "/contact" },
-  secondaryCta: { label: "Book Site Inspection", href: "/contact" },
+    "Shelair has delivered commercial air conditioning and mechanical services for more than 30 years. Our licensed technicians support facilities, hospitality, retail, education, healthcare and commercial property — with 24/7 emergency response when required.",
+  primaryCta: { label: "Request a Commercial Quote", href: "/contact" },
+  secondaryCta: { label: "Book a Site Inspection", href: "/contact" },
   floatingStats: [
     {
       value: "HACCP-Certified",
@@ -370,9 +370,9 @@ export const locationsSection = {
 // ─── CTA Banner ───────────────────────────────────────────────────────────────
 
 export const ctaBanner = {
-  heading: "Refrigeration Emergency? We're On Call 24/7.",
+  heading: "Commercial Air Conditioning Problem? We're On Call 24/7.",
   subheading:
-    "Don't lose stock to a breakdown. Call now or book a maintenance plan to prevent it happening in the first place.",
+    "For breakdowns, planned maintenance, replacements or new installations, speak directly with our commercial HVAC team.",
   primaryCta: { label: "Get a Free Quote", href: "/contact" },
   secondaryCta: { label: "Call 1300 227 600", phone: "1300227600" },
 };
@@ -381,9 +381,9 @@ export const ctaBanner = {
 
 export const projectsHomeSection = {
   badge: "Our Work",
-  heading: "Projects We're Proud Of",
+  heading: "Commercial HVAC Projects",
   subheading:
-    "From emergency repairs to large-scale cold room builds — here's a snapshot of what we've delivered for Australian businesses.",
+    "A selection of commercial air conditioning, mechanical services, replacement and upgrade work delivered for Queensland organisations.",
   viewMoreLabel: "View all projects",
   viewMoreHref: "/projects",
 };
@@ -397,27 +397,27 @@ export interface FAQ {
 
 export const faqSection = {
   heading: "Frequently Asked Questions",
-  subheading: "Common questions about our refrigeration services.",
+  subheading: "Common questions about our commercial air conditioning services.",
   faqs: [
     {
       q: "How quickly can you respond to an emergency breakdown?",
       a: "We offer 24/7 emergency call-outs with an average response time of 2 hours across Brisbane, Gold Coast and SE Queensland. For critical systems, we prioritise same-hour dispatch.",
     },
     {
-      q: "Do you service all refrigeration brands?",
-      a: "Yes. Our technicians are trained and equipped to service, repair, and maintain all major commercial air conditioning brands including Bitzer, Copeland, Danfoss, Daikin, and more.",
+      q: "Do you service all major commercial air conditioning brands?",
+      a: "Yes. Our technicians service and repair major commercial HVAC brands and system types, including split, ducted, packaged and VRF/VRV equipment.",
     },
     {
       q: "What does a preventative maintenance plan include?",
       a: "Our plans include scheduled servicing visits, filter and component checks, refrigerant level monitoring, energy efficiency audits, 24/7 remote monitoring, and priority emergency response.",
     },
     {
-      q: "Can you help us pass a HACCP or food safety audit?",
-      a: "Yes. While most of our work is repairs and maintenance, we also design, fabricate, and install custom HACCP-compliant cold rooms. Contact us for a site inspection and quote.",
+      q: "Can you maintain multiple HVAC assets across a commercial site?",
+      a: "Yes. We provide planned preventative maintenance for commercial sites with multiple air conditioning assets, with asset records, scheduled servicing and repair recommendations.",
     },
     {
-      q: "Do you also build new cold rooms?",
-      a: "Yes. Our modular systems are designed for easy expansion. We can also retrofit existing cold rooms with upgraded insulation, compressors, and smart monitoring.",
+      q: "Do you replace and install commercial air conditioning systems?",
+      a: "Yes. We scope, supply, install and commission commercial air conditioning replacements, upgrades and new systems, with ongoing maintenance available after handover.",
     },
     {
       q: "What areas do you service?",

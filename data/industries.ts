@@ -16,14 +16,14 @@ export interface Industry {
 
 export const industriesPage = {
   badge: "Industries",
-  heading: "Refrigeration Repair & Maintenance for Every Industry",
+  heading: "Commercial Air Conditioning for Every Industry",
   subheading:
     "Specialist servicing, emergency repairs and maintenance plans tailored to the unique demands of your sector.",
 };
 
 export const industriesHomeSection = {
   heading: "Industries We Serve",
-  subheading: "Tailored refrigeration solutions for every sector.",
+  subheading: "Commercial HVAC solutions tailored to the operating demands of each sector.",
 };
 
 // ─── Industry list ────────────────────────────────────────────────────────────
