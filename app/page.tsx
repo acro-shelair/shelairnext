@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Index from "@/components/pages/Index";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { withRetry } from "@/lib/retry";
-import { faqSection, testimonialsSection } from "@/data/home";
+import { faqSection } from "@/data/home";
 import { getAllIndustries, getAllBrands, getAllOtherBrands, getAllCities } from "@/lib/supabase/content";
+import { shelairPricing } from "@/lib/shelair-pricing";
 
 export const revalidate = 600;
 
@@ -43,10 +44,9 @@ const localBusinessSchema = {
 
 export default async function Home() {
   const supabase = createAdminClient();
-  const [{ data: faqs }, { data: testimonials }, { data: pricingTiersData }, featuredProjects, industries, brands, otherBrands, cities] =
+  const [{ data: faqs }, { data: pricingTiersData }, featuredProjects, industries, brands, otherBrands, cities] =
     await Promise.all([
       withRetry(() => supabase.from("faqs").select("*").order("position")),
-      withRetry(() => supabase.from("testimonials").select("*").order("position")),
       withRetry(() => supabase.from("pricing_tiers").select("*").order("position")),
       withRetry(() =>
         supabase.from("projects").select("*").eq("featured", true).order("position").limit(3)
@@ -61,29 +61,7 @@ export default async function Home() {
     ? faqs.map((f: { question: string; answer: string }) => ({ q: f.question, a: f.answer }))
     : faqSection.faqs;
 
-  const reviewItems = testimonials?.length
-    ? testimonials.map((t: { name: string; role: string; quote: string; rating?: number }) => ({ name: t.name, role: t.role, quote: t.quote, rating: t.rating ?? 5 }))
-    : testimonialsSection.testimonials.map((t) => ({ ...t, rating: 5 }));
-
-  const avgRating = reviewItems.reduce((sum: number, t: { rating: number }) => sum + t.rating, 0) / reviewItems.length;
-
-  const reviewsSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "Shelair",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: avgRating.toFixed(1),
-      reviewCount: reviewItems.length,
-      bestRating: 5,
-    },
-    review: reviewItems.map((t: { name: string; quote: string; rating: number }) => ({
-      "@type": "Review",
-      author: { "@type": "Person", name: t.name },
-      reviewBody: t.quote,
-      reviewRating: { "@type": "Rating", ratingValue: t.rating, bestRating: 5 },
-    })),
-  };
+  const reviewItems: { name: string; role: string; quote: string; rating: number }[] = [];
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -103,16 +81,12 @@ export default async function Home() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsSchema) }}
-      />
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <Index
         faqItems={faqItems}
         reviewItems={reviewItems}
-        pricingTiers={pricingTiersData ?? []}
+        pricingTiers={shelairPricing(pricingTiersData ?? [])}
         featuredProjects={featuredProjects}
         industries={industries}
         brands={brands}
